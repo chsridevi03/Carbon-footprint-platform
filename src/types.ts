@@ -11,7 +11,8 @@ export interface User {
   score: number; // 0-100 overall sustainability rating
   points: number; // gamified challenges points
   isAdmin: boolean;
-  badges: string[]; // List of badge IDs
+  badges: string[];
+  password?: string;// List of badge IDs
 }
 
 export interface CarbonCalculation {
