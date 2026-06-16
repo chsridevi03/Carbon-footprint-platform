@@ -42,6 +42,7 @@ export default function App() {
   const [authEmail, setAuthEmail] = useState<string>('');
   const [authName, setAuthName] = useState<string>('');
   const [authPassword, setAuthPassword] = useState<string>('');
+  const [authConfirmPassword, setAuthConfirmPassword] = useState<string>('');
   const [authLoading, setAuthLoading] = useState<boolean>(false);
   const [authError, setAuthError] = useState<string | null>(null);
 
@@ -124,6 +125,33 @@ export default function App() {
     e.preventDefault();
     setAuthLoading(true);
     setAuthError(null);
+
+    // 1. Email structure checking (Mail recheck)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(authEmail.trim())) {
+      setAuthError('Please enter a valid email address (e.g. user@greentrack.ai).');
+      setAuthLoading(false);
+      return;
+    }
+
+    // 2. Extra validations for profile registration
+    if (isRegister) {
+      if (!authName.trim()) {
+        setAuthError('Please enter your full name to generate a green profile.');
+        setAuthLoading(false);
+        return;
+      }
+      if (authPassword.length < 6) {
+        setAuthError('Password must contain at least 6 characters.');
+        setAuthLoading(false);
+        return;
+      }
+      if (authPassword !== authConfirmPassword) {
+        setAuthError('Passwords do not match. Please verify your secure password recheck matches original password.');
+        setAuthLoading(false);
+        return;
+      }
+    }
 
     const url = isRegister ? '/api/auth/register' : '/api/auth/login';
     const payload = isRegister 
@@ -444,6 +472,26 @@ export default function App() {
                   )}
                 </div>
 
+                {isRegister && (
+                  <div className="space-y-1">
+                    <label className="text-xs text-natural-text-sage dark:text-slate-400 font-semibold block">Confirm Password</label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-2.5 text-[#6B7C6B]">
+                        <Lock size={14} />
+                      </span>
+                      <input
+                        type="password"
+                        required
+                        value={authConfirmPassword}
+                        onChange={(e) => setAuthConfirmPassword(e.target.value)}
+                        className="w-full text-xs font-semibold pl-10 pr-4 py-2 border border-natural-bg-muted rounded-lg bg-natural-bg-muted/10 dark:bg-slate-850 text-natural-text-dark dark:text-white focus:bg-white focus:border-natural-primary"
+                        placeholder="••••••••"
+                        id="auth-confirm-pwd-input"
+                      />
+                    </div>
+                  </div>
+                )}
+
                 <button
                   type="submit"
                   disabled={authLoading}
@@ -468,6 +516,8 @@ export default function App() {
                   onClick={() => {
                     setIsRegister(!isRegister);
                     setAuthError(null);
+                    setAuthPassword('');
+                    setAuthConfirmPassword('');
                   }}
                   id="auth-toggle-btn"
                   className="text-xs font-bold text-natural-primary hover:text-natural-alt transition font-mono leading-none cursor-pointer"
