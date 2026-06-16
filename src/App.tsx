@@ -15,6 +15,7 @@ import Leaderboard from './components/Leaderboard';
 import AdminHub from './components/AdminHub';
 import PdfReport from './components/PdfReport';
 import { User, CarbonCalculation, Challenge, Recommendation } from './types';
+import { validateAuthInput } from './utils/authValidation';
 
 export default function App() {
   // Session Token State
@@ -126,31 +127,19 @@ export default function App() {
     setAuthLoading(true);
     setAuthError(null);
 
-    // 1. Email structure checking (Mail recheck)
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(authEmail.trim())) {
-      setAuthError('Please enter a valid email address (e.g. user@greentrack.ai).');
+    // Run imported validation checker (tested via Vitest)
+    const validation = validateAuthInput({
+      email: authEmail,
+      password: authPassword,
+      isRegister,
+      name: authName,
+      confirmPassword: authConfirmPassword,
+    });
+
+    if (!validation.isValid) {
+      setAuthError(validation.error);
       setAuthLoading(false);
       return;
-    }
-
-    // 2. Extra validations for profile registration
-    if (isRegister) {
-      if (!authName.trim()) {
-        setAuthError('Please enter your full name to generate a green profile.');
-        setAuthLoading(false);
-        return;
-      }
-      if (authPassword.length < 6) {
-        setAuthError('Password must contain at least 6 characters.');
-        setAuthLoading(false);
-        return;
-      }
-      if (authPassword !== authConfirmPassword) {
-        setAuthError('Passwords do not match. Please verify your secure password recheck matches original password.');
-        setAuthLoading(false);
-        return;
-      }
     }
 
     const url = isRegister ? '/api/auth/register' : '/api/auth/login';
