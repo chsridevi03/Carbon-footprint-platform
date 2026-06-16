@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  
+  /* Primary Natural Tones Palette */
+  --color-natural-bg: #F7F9F7;
+  --color-natural-text-dark: #1B3022;
+  --color-natural-text-charcoal: #2D3A2D;
+  --color-natural-text-sage: #6B7C6B;
+  --color-natural-primary: #386641;
+  --color-natural-alt: #4A7C59;
+  --color-natural-lime: #A7C957;
+  --color-natural-mid-green: #6A994E;
+  --color-natural-bg-muted: #F0F4F0;
+  
+  --color-natural-toast: #FAF3DD;
+  --color-natural-toast-border: #E3D9BC;
+  --color-natural-toast-text: #7A6C4A;
+  --color-natural-toast-text-alt: #5C5238;
+  
+  --color-natural-alert: #BC4749;
+
+  /* Redefine forest colors to leverage our primary Natural schema automatically */
+  --color-forest-50: #F0F4F0;
+  --color-forest-100: #E8EEE8;
+  --color-forest-200: #A7C957;
+  --color-forest-300: #6A994E;
+  --color-forest-400: #4A7C59;
+  --color-forest-500: #386641;
+  --color-forest-600: #1B3022;
+  --color-forest-700: #15321B;
+  --color-forest-800: #0D2011;
+  --color-forest-900: #061108;
+  --color-forest-950: #030804;
+}
+
+@layer base {
+  body {
+    background-color: #F7F9F7;
+    color: #2D3A2D;
+    font-family: var(--font-sans);
+    @apply antialiased transition-colors duration-300;
+  }
+  
+  body.dark {
+    background-color: #0E160F;
+    color: #E8EEE8;
+  }
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 dark:bg-slate-700 rounded;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-400 dark:bg-slate-600;
+}
+
+/* Optimized Printing styling */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .print-card {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+  }
+}

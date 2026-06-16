@@ -1,0 +1,6 @@
+{
+  "name": "GreenTrack AI",
+  "description": "Carbon Footprint Awareness Platform supporting tracking, visualization, personalized AI recommendations, and eco challenges.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
